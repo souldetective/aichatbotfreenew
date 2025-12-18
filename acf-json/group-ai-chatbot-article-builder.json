@@ -746,6 +746,32 @@
                                             ]
                                         },
                                         {
+                                            "key": "field_cb_left_centered_title",
+                                            "label": "Centered Title",
+                                            "name": "centered_title",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "key": "field_cb_left_centered_title_color",
+                                            "label": "Centered Title Color",
+                                            "name": "centered_title_color",
+                                            "type": "color_picker",
+                                            "return_format": "string",
+                                            "wrapper": {
+                                                "width": "50"
+                                            }
+                                        },
+                                        {
+                                            "key": "field_cb_left_centered_title_size",
+                                            "label": "Centered Title Font Size (px)",
+                                            "name": "centered_title_font_size",
+                                            "type": "number",
+                                            "append": "px",
+                                            "wrapper": {
+                                                "width": "50"
+                                            }
+                                        },
+                                        {
                                             "key": "field_cb_left_title_text",
                                             "label": "Title",
                                             "name": "title",
@@ -930,6 +956,32 @@
                                                     }
                                                 ]
                                             ]
+                                        },
+                                        {
+                                            "key": "field_cb_right_centered_title",
+                                            "label": "Centered Title",
+                                            "name": "centered_title",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "key": "field_cb_right_centered_title_color",
+                                            "label": "Centered Title Color",
+                                            "name": "centered_title_color",
+                                            "type": "color_picker",
+                                            "return_format": "string",
+                                            "wrapper": {
+                                                "width": "50"
+                                            }
+                                        },
+                                        {
+                                            "key": "field_cb_right_centered_title_size",
+                                            "label": "Centered Title Font Size (px)",
+                                            "name": "centered_title_font_size",
+                                            "type": "number",
+                                            "append": "px",
+                                            "wrapper": {
+                                                "width": "50"
+                                            }
                                         },
                                         {
                                             "key": "field_cb_right_title_text",
@@ -1227,5 +1279,5 @@
     "active": true,
     "description": "Flexible article builder for AI chatbot content.",
     "show_in_rest": 0,
-    "modified": 1733610000
+    "modified": 1733613600
 }

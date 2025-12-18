@@ -615,6 +615,49 @@ if ( ! function_exists( 'aichatbotfree_article_section_style_attr' ) ) {
                 $content = get_sub_field( 'cb_content' );
                 $rows    = get_sub_field( 'cb_rows' );
 
+                if ( ! function_exists( 'aichatbotfree_cb_render_centered_title' ) ) {
+                    /**
+                     * Render a centered title overlay for a Content Block column.
+                     *
+                     * @param array $column Column data from ACF.
+                     *
+                     * @return string
+                     */
+                    function aichatbotfree_cb_render_centered_title( $column ) {
+                        $title = isset( $column['centered_title'] ) ? trim( $column['centered_title'] ) : '';
+
+                        if ( '' === $title ) {
+                            return '';
+                        }
+
+                        $title_color_raw = isset( $column['centered_title_color'] ) ? $column['centered_title_color'] : '';
+                        $title_color     = $title_color_raw ? ( sanitize_hex_color( $title_color_raw ) ?: $title_color_raw ) : '';
+                        $title_size_raw  = isset( $column['centered_title_font_size'] ) ? $column['centered_title_font_size'] : '';
+                        $title_size      = '';
+
+                        if ( '' !== $title_size_raw ) {
+                            $numeric_size = preg_replace( '/[^0-9.]/', '', (string) $title_size_raw );
+                            if ( '' !== $numeric_size ) {
+                                $title_size = $numeric_size . 'px';
+                            }
+                        }
+
+                        $styles = [];
+
+                        if ( $title_color ) {
+                            $styles[] = '--cb-centered-title-color:' . $title_color;
+                        }
+
+                        if ( $title_size ) {
+                            $styles[] = '--cb-centered-title-size:' . $title_size;
+                        }
+
+                        $style_attr = $styles ? ' style="' . esc_attr( implode( ';', $styles ) ) . '"' : '';
+
+                        return '<div class="content-block__centered-title"' . $style_attr . '><span>' . esc_html( $title ) . '</span></div>';
+                    }
+                }
+
                 if ( ! function_exists( 'aichatbotfree_cb_render_column' ) ) {
                     /**
                      * Render a Content Block column based on its type.
@@ -632,6 +675,7 @@ if ( ! function_exists( 'aichatbotfree_article_section_style_attr' ) ) {
                         $title_color          = $title_color_raw ? ( sanitize_hex_color( $title_color_raw ) ?: $title_color_raw ) : '';
                         $title_size_raw       = isset( $column['title_font_size'] ) ? $column['title_font_size'] : '';
                         $title_size           = '';
+                        $centered_title       = aichatbotfree_cb_render_centered_title( $column );
 
                         if ( '' !== $title_size_raw ) {
                             $numeric_size = preg_replace( '/[^0-9.]/', '', (string) $title_size_raw );
@@ -668,7 +712,7 @@ if ( ! function_exists( 'aichatbotfree_article_section_style_attr' ) ) {
                                 $style_attr = $styles ? ' style="' . esc_attr( implode( ';', $styles ) ) . '"' : '';
 
                                 // Image column: full-cover background only with inline cover properties for reliability.
-                                return '<div class="content-block__column content-block__column--image"' . $style_attr . '></div>';
+                                return '<div class="content-block__column content-block__column--image' . ( $centered_title ? ' content-block__column--has-centered-title' : '' ) . '"' . $style_attr . '>' . $centered_title . '</div>';
                             }
 
                             if ( ! $background_color && '' === trim( $title ) ) {
@@ -690,7 +734,7 @@ if ( ! function_exists( 'aichatbotfree_article_section_style_attr' ) ) {
                             $title_html = $title ? '<h3>' . esc_html( $title ) . '</h3>' : '';
 
                             // Image column fallback: color block with centered title.
-                            return '<div class="content-block__column content-block__column--color content-block__column--image-fallback"' . $style_attr . '><div class="content-block__title-wrap">' . $title_html . '</div></div>';
+                            return '<div class="content-block__column content-block__column--color content-block__column--image-fallback' . ( $centered_title ? ' content-block__column--has-centered-title' : '' ) . '"' . $style_attr . '><div class="content-block__title-wrap">' . $title_html . '</div>' . $centered_title . '</div>';
                         }
 
                         $column_content   = isset( $column['column_content'] ) ? $column['column_content'] : '';
@@ -721,8 +765,9 @@ if ( ! function_exists( 'aichatbotfree_article_section_style_attr' ) ) {
 
                         $style_attr = $styles ? ' style="' . esc_attr( implode( ';', $styles ) ) . '"' : '';
 
-                        $column_markup  = '<div class="content-block__column content-block__column--color content-block__column--text"' . $style_attr . '>';
+                        $column_markup  = '<div class="content-block__column content-block__column--color content-block__column--text' . ( $centered_title ? ' content-block__column--has-centered-title' : '' ) . '"' . $style_attr . '>';
                         $column_markup .= '<div class="content-block__column-content">' . wp_kses_post( $column_content ) . '</div>';
+                        $column_markup .= $centered_title;
                         $column_markup .= '</div>';
 
                         return $column_markup;
