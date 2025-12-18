@@ -553,6 +553,7 @@
     min-height: 240px;
     border-radius: 12px;
     overflow: hidden;
+    position: relative;
 }
 
 /* Image-only mode: cover the full column background without inner content */
@@ -604,6 +605,22 @@
 .content-block__column-content {
     display: grid;
     gap: 10px;
+}
+
+.content-block__column--has-centered-title {
+    position: relative;
+}
+
+.content-block__centered-title {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+    text-align: center;
+    pointer-events: none;
+    color: var(--cb-centered-title-color, currentColor);
+    font-size: var(--cb-centered-title-size, 1.5rem);
 }
 
 .content-block__column-content a { color: var(--cb-link-color, currentColor); }
