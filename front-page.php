@@ -235,15 +235,17 @@ if ( empty( $tool_highlight ) && ! empty( $tool_highlight_manual ) ) {
                             $ai        = aichatbotfree_get_field( 'ai_support', $post->ID );
                             $best_for  = aichatbotfree_get_field( 'best_for', $post->ID );
                             $rating    = aichatbotfree_get_field( 'star_rating', $post->ID );
+                            // Prefer the homepage-specific title when provided; fall back to the normal post title.
+                            $homepage_title = get_field( 'homepage_section_title', get_the_ID() );
                             ?>
                             <tr>
-                                <td><?php the_title(); ?></td>
+                                <td><?php echo esc_html( $homepage_title ?: get_the_title() ); ?></td>
                                 <td><?php echo esc_html( $free_plan ); ?></td>
                                 <td><?php echo esc_html( $channels ); ?></td>
                                 <td><?php echo esc_html( $ai ); ?></td>
                                 <td><?php echo esc_html( $best_for ); ?></td>
                                 <td><?php echo aichatbotfree_render_rating( $rating ); ?></td>
-                                <td><a class="button secondary" href="<?php the_permalink(); ?>"><?php esc_html_e( 'Read Review', 'aichatbotfree' ); ?></a></td>
+                                <td><a class="read-review-link" href="<?php the_permalink(); ?>"><?php esc_html_e( 'Read Review', 'aichatbotfree' ); ?></a></td>
                             </tr>
                             <?php
                         }
