@@ -96,6 +96,24 @@ if ( ! empty( $tool_highlight_terms ) ) {
 if ( empty( $tool_highlight ) && ! empty( $tool_highlight_manual ) ) {
     $tool_highlight = $tool_highlight_manual;
 }
+$highlight_has_website = false;
+if ( ! empty( $tool_highlight ) ) {
+    foreach ( $tool_highlight as $highlight_post ) {
+        $highlight_id = $highlight_post instanceof WP_Post ? $highlight_post->ID : ( is_numeric( $highlight_post ) ? (int) $highlight_post : 0 );
+        if ( ! $highlight_id ) {
+            continue;
+        }
+
+        $link_data = aichatbotfree_get_affiliate_link_data( $highlight_id );
+
+        if ( $link_data['url'] && $link_data['title'] ) {
+            $highlight_has_website = true;
+            break;
+        }
+    }
+}
+$free_show_website = aichatbotfree_should_show_website_column( $free_comparison );
+$paid_show_website = aichatbotfree_should_show_website_column( $paid_comparison );
 ?>
 <section class="hero"<?php echo $hero_style_attr; ?>>
     <div class="container hero-grid">
@@ -222,7 +240,10 @@ if ( empty( $tool_highlight ) && ! empty( $tool_highlight_manual ) ) {
                         <th><?php echo esc_html( $tool_headers['ai_support'] ?? __( 'AI Support', 'aichatbotfree' ) ); ?></th>
                         <th><?php echo esc_html( $tool_headers['best_for'] ?? __( 'Best For', 'aichatbotfree' ) ); ?></th>
                         <th><?php echo esc_html( $tool_headers['rating'] ?? __( 'Rating', 'aichatbotfree' ) ); ?></th>
-                        <th></th>
+                        <?php if ( $highlight_has_website ) : ?>
+                            <th><?php esc_html_e( 'Website', 'aichatbotfree' ); ?></th>
+                        <?php endif; ?>
+                        <th><?php esc_html_e( 'Read Review', 'aichatbotfree' ); ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -235,6 +256,10 @@ if ( empty( $tool_highlight ) && ! empty( $tool_highlight_manual ) ) {
                             $ai        = aichatbotfree_get_field( 'ai_support', $post->ID );
                             $best_for  = aichatbotfree_get_field( 'best_for', $post->ID );
                             $rating    = aichatbotfree_get_field( 'star_rating', $post->ID );
+                            $affiliate = aichatbotfree_get_affiliate_link_data( get_the_ID() );
+                            $has_site  = $highlight_has_website && $affiliate['url'] && $affiliate['title'];
+                            // When the Website column is enabled but data is missing, merge the CTA cell to avoid empty cells.
+                            $review_cell_attributes = $highlight_has_website && ! $has_site ? ' colspan="2"' : '';
                             // Prefer the homepage-specific title when provided; fall back to the normal post title.
                             $homepage_title = get_field( 'homepage_section_title', get_the_ID() );
                             ?>
@@ -245,13 +270,17 @@ if ( empty( $tool_highlight ) && ! empty( $tool_highlight_manual ) ) {
                                 <td><?php echo esc_html( $ai ); ?></td>
                                 <td><?php echo esc_html( $best_for ); ?></td>
                                 <td><?php echo aichatbotfree_render_rating( $rating ); ?></td>
-                                <td><a class="read-review-link" href="<?php the_permalink(); ?>"><?php esc_html_e( 'Read Review', 'aichatbotfree' ); ?></a></td>
+                                <?php if ( $has_site ) : ?>
+                                    <td><a class="website-link" href="<?php echo esc_url( $affiliate['url'] ); ?>" rel="nofollow noopener" target="_blank"><?php echo esc_html( $affiliate['title'] ); ?></a></td>
+                                <?php endif; ?>
+                                <td<?php echo $review_cell_attributes; ?>><a class="read-review-link" href="<?php the_permalink(); ?>"><?php esc_html_e( 'Read Review', 'aichatbotfree' ); ?></a></td>
                             </tr>
                             <?php
                         }
                         wp_reset_postdata();
                     } else {
-                        echo '<tr><td colspan="7">' . esc_html__( 'Choose chatbot tools via taxonomies or manual picks in Homepage Options.', 'aichatbotfree' ) . '</td></tr>';
+                        $highlight_columns = 7 + ( $highlight_has_website ? 1 : 0 );
+                        echo '<tr><td colspan="' . esc_attr( $highlight_columns ) . '">' . esc_html__( 'Choose chatbot tools via taxonomies or manual picks in Homepage Options.', 'aichatbotfree' ) . '</td></tr>';
                     }
                     ?>
                 </tbody>
@@ -261,13 +290,13 @@ if ( empty( $tool_highlight ) && ! empty( $tool_highlight_manual ) ) {
 </section>
 
 <section class="section comparison-double">
-    <div class="container">
-        <div class="section-title">
+    <div class="container comparison-stack">
+        <div class="comparison-stack__header">
             <h2><?php esc_html_e( 'Free vs Paid Chatbot Plans', 'aichatbotfree' ); ?></h2>
             <p><?php esc_html_e( 'Quickly compare plans and jump to in-depth reviews.', 'aichatbotfree' ); ?></p>
         </div>
-        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
-            <div class="card">
+        <div class="comparison-stack__tables">
+            <div class="card comparison-stack__table">
                 <h3><?php esc_html_e( 'Free Plan Comparison', 'aichatbotfree' ); ?></h3>
                 <table class="comparison-table">
                     <thead>
@@ -277,15 +306,18 @@ if ( empty( $tool_highlight ) && ! empty( $tool_highlight_manual ) ) {
                             <th><?php echo esc_html( $free_headers['channels'] ?? __( 'Channels', 'aichatbotfree' ) ); ?></th>
                             <th><?php echo esc_html( $free_headers['ai'] ?? __( 'AI', 'aichatbotfree' ) ); ?></th>
                             <th><?php echo esc_html( $free_headers['rating'] ?? __( 'Rating', 'aichatbotfree' ) ); ?></th>
-                            <th></th>
+                            <?php if ( $free_show_website ) : ?>
+                                <th><?php esc_html_e( 'Website', 'aichatbotfree' ); ?></th>
+                            <?php endif; ?>
+                            <th><?php esc_html_e( 'Read Review', 'aichatbotfree' ); ?></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php aichatbotfree_render_comparison_rows( $free_comparison, 'free' ); ?>
+                        <?php aichatbotfree_render_comparison_rows( $free_comparison, 'free', $free_show_website ); ?>
                     </tbody>
                 </table>
             </div>
-            <div class="card">
+            <div class="card comparison-stack__table">
                 <h3><?php esc_html_e( 'Paid Plan Comparison', 'aichatbotfree' ); ?></h3>
                 <table class="comparison-table">
                     <thead>
@@ -295,11 +327,14 @@ if ( empty( $tool_highlight ) && ! empty( $tool_highlight_manual ) ) {
                             <th><?php echo esc_html( $paid_headers['channels'] ?? __( 'Channels', 'aichatbotfree' ) ); ?></th>
                             <th><?php echo esc_html( $paid_headers['ai'] ?? __( 'AI', 'aichatbotfree' ) ); ?></th>
                             <th><?php echo esc_html( $paid_headers['rating'] ?? __( 'Rating', 'aichatbotfree' ) ); ?></th>
-                            <th></th>
+                            <?php if ( $paid_show_website ) : ?>
+                                <th><?php esc_html_e( 'Website', 'aichatbotfree' ); ?></th>
+                            <?php endif; ?>
+                            <th><?php esc_html_e( 'Read Review', 'aichatbotfree' ); ?></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php aichatbotfree_render_comparison_rows( $paid_comparison, 'paid' ); ?>
+                        <?php aichatbotfree_render_comparison_rows( $paid_comparison, 'paid', $paid_show_website ); ?>
                     </tbody>
                 </table>
             </div>

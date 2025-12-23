@@ -792,6 +792,14 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'type' => 'text',
                 ],
                 [
+                    'key'   => 'field_affiliate_link_title',
+                    'label' => 'Affiliate Link Title',
+                    'name'  => 'affiliate_link_title',
+                    'type'  => 'text',
+                    // Optional CTA label shown alongside affiliate links without changing existing URLs.
+                    'instructions' => 'Optional: custom label used when rendering affiliate calls-to-action.',
+                ],
+                [
                     'key' => 'field_affiliate_url',
                     'label' => 'Affiliate URL',
                     'name' => 'affiliate_url',
@@ -862,9 +870,61 @@ function aichatbotfree_render_rating( $rating ) {
 }
 
 /**
+ * Retrieve affiliate link data for a tool with fallbacks when ACF is not loaded.
+ *
+ * @param int $post_id Chatbot tool post ID.
+ *
+ * @return array{url:string,title:string}
+ */
+function aichatbotfree_get_affiliate_link_data( $post_id ) {
+    return [
+        'url'   => aichatbotfree_get_field( 'affiliate_url', $post_id, '' ),
+        'title' => aichatbotfree_get_field( 'affiliate_link_title', $post_id, '' ),
+    ];
+}
+
+/**
+ * Determine whether a comparison data set contains at least one row with a complete affiliate link.
+ *
+ * @param array $items Comparison rows.
+ *
+ * @return bool
+ */
+function aichatbotfree_should_show_website_column( $items ) {
+    if ( empty( $items ) || ! is_array( $items ) ) {
+        return false;
+    }
+
+    foreach ( $items as $item ) {
+        $tool = $item['tool'] ?? null;
+        $tool_id = 0;
+
+        if ( $tool instanceof WP_Post ) {
+            $tool_id = $tool->ID;
+        } elseif ( is_array( $tool ) && isset( $tool['ID'] ) ) {
+            $tool_id = (int) $tool['ID'];
+        } elseif ( is_numeric( $tool ) ) {
+            $tool_id = (int) $tool;
+        }
+
+        if ( ! $tool_id ) {
+            continue;
+        }
+
+        $affiliate = aichatbotfree_get_affiliate_link_data( $tool_id );
+
+        if ( $affiliate['url'] && $affiliate['title'] ) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/**
  * Helper to render the comparison table rows.
  */
-function aichatbotfree_render_comparison_rows( $items, $type = 'free' ) {
+function aichatbotfree_render_comparison_rows( $items, $type = 'free', $show_website = false ) {
     if ( empty( $items ) ) {
         return;
     }
@@ -875,15 +935,23 @@ function aichatbotfree_render_comparison_rows( $items, $type = 'free' ) {
         $channels  = $item['channels'] ?? '';
         $ai        = $item['ai_support'] ?? '';
         $rating    = $item['rating'] ?? '';
-        $link      = $tool ? get_permalink( $tool ) : '';
-        $tool_name = $tool ? get_the_title( $tool ) : '';
+        $tool_id   = $tool instanceof WP_Post ? $tool->ID : ( ( is_array( $tool ) && isset( $tool['ID'] ) ) ? (int) $tool['ID'] : ( is_numeric( $tool ) ? (int) $tool : 0 ) );
+        $link      = $tool_id ? get_permalink( $tool_id ) : '';
+        $tool_name = $tool_id ? get_the_title( $tool_id ) : '';
+        $affiliate = $tool_id ? aichatbotfree_get_affiliate_link_data( $tool_id ) : [ 'url' => '', 'title' => '' ];
+        $has_site  = $show_website && $affiliate['url'] && $affiliate['title'];
+        $review_cell_attributes = $show_website && ! $has_site ? ' colspan="2"' : '';
         echo '<tr>';
         echo '<td>' . esc_html( $tool_name ) . '</td>';
         echo '<td>' . esc_html( $plan ) . '</td>';
         echo '<td>' . esc_html( $channels ) . '</td>';
         echo '<td>' . esc_html( $ai ) . '</td>';
         echo '<td>' . aichatbotfree_render_rating( $rating ) . '</td>';
-        echo '<td><a class="button secondary" href="' . esc_url( $link ) . '">Read Review</a></td>';
+        // Only render the Website column when both affiliate fields are present for this tool.
+        if ( $has_site ) {
+            echo '<td><a class="website-link" href="' . esc_url( $affiliate['url'] ) . '" rel="nofollow noopener" target="_blank">' . esc_html( $affiliate['title'] ) . '</a></td>';
+        }
+        echo '<td' . $review_cell_attributes . '><a class="read-review-link" href="' . esc_url( $link ) . '">' . esc_html__( 'Read Review', 'aichatbotfree' ) . '</a></td>';
         echo '</tr>';
     }
 }
