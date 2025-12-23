@@ -44,7 +44,7 @@
                         <?php endforeach; ?>
                         <?php if ( $affiliate ) : ?>
                             <td data-label="<?php esc_attr_e( 'Website', 'aichatbotfree' ); ?>">
-                                <a class="website-link" href="<?php echo esc_url( $affiliate ); ?>" target="_blank" rel="nofollow noopener">
+                                <a class="website-link cta-text-link" href="<?php echo esc_url( $affiliate ); ?>" target="_blank" rel="nofollow noopener">
                                     <?php
                                     // Fallback to legacy CTA text when no custom title is provided.
                                     echo esc_html( $affiliate_title ? $affiliate_title : __( 'Get Started', 'aichatbotfree' ) );

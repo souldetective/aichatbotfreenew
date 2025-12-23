@@ -22,8 +22,8 @@ get_header();
         <?php while (have_posts()) : the_post(); ?>
           <article class="card">
             <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-            <p><?php echo wp_kses_post(wp_trim_words(get_the_excerpt(), 26, '...')); ?></p>
-            <a class="button secondary" href="<?php the_permalink(); ?>">Read more</a>
+            <p class="card-excerpt"><?php echo wp_kses_post( wp_trim_words( get_the_excerpt(), 28, '…' ) ); ?></p>
+            <a class="read-review-link cta-text-link" href="<?php the_permalink(); ?>"><?php esc_html_e( 'Read More', 'aichatbotfree' ); ?></a>
           </article>
         <?php endwhile; ?>
       </div>

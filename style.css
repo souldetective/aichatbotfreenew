@@ -57,9 +57,10 @@ Text Domain: aichatbotfree
   --text-primary: var(--light);
   --text-secondary: var(--muted);
   --text-accent: var(--primary);
-  --link-default: var(--primary);
-  --link-visited: var(--light);
+  --link-default: #4caf50;
+  --link-visited: #4caf50;
   --link-hover: var(--accent);
+  --cta-link: #4caf50;
   --bg-white: var(--bg);
   --bg-dark: var(--bg);
   --surface: var(--card);
@@ -112,11 +113,12 @@ ul, ol {
 
 /* Global anchor styles */
 a {
-  color: var(--primary);
+  /* Standardize CTA and inline link color without altering existing typography. */
+  color: var(--link-default);
   text-decoration: none;
   transition: color 0.2s ease, text-decoration-color 0.2s ease;
 }
-a:visited { color: var(--primary); }
+a:visited { color: var(--link-visited); }
 a:hover { color: var(--accent); text-decoration: none; }
 
 a:focus-visible {
@@ -345,7 +347,8 @@ label { color: var(--text-primary); font-weight: 600; display: block; margin-bot
 .read-review-link,
 .cta-text-link,
 .website-link {
-  color: #00c27a;
+  /* Keep CTA anchors consistent across templates and CPTs to reinforce a unified link language. */
+  color: var(--cta-link);
   font-weight: 500;
   text-decoration: none;
   font-size: 14px;
@@ -355,13 +358,43 @@ label { color: var(--text-primary); font-weight: 600; display: block; margin-bot
 .cta-text-link:hover,
 .website-link:hover {
   text-decoration: underline;
-  color: #00c27a;
+  color: var(--cta-link);
 }
 
 .cta-text-link {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+}
+
+.card h3 a {
+  color: var(--cta-link);
+}
+
+.card h3 a:hover {
+  color: var(--link-hover);
+}
+
+.card-excerpt,
+.pillar-card__excerpt {
+  /* Clamp card summaries to keep grid heights balanced without truncating titles. */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.entry-content a {
+  /* Ensure in-post links follow the standardized CTA color while respecting existing hover effects. */
+  color: var(--cta-link);
+}
+
+.entry-content a:visited {
+  color: var(--cta-link);
+}
+
+.entry-content a:hover {
+  color: var(--link-hover);
 }
 
 .single-tool-table { margin-top: var(--space-4); }
