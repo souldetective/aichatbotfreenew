@@ -251,6 +251,12 @@ label { color: var(--text-primary); font-weight: 600; display: block; margin-bot
 .comparison-table th { color: var(--text-primary); font-size: 14px; text-transform: uppercase; letter-spacing: 0.02em; }
 .comparison-table tr:hover td { background: rgba(0, 102, 255, 0.05); }
 
+.comparison-stack { display: flex; flex-direction: column; gap: var(--space-4); }
+.comparison-stack__header p { margin: 6px 0 0; max-width: 720px; }
+.comparison-stack__tables { display: flex; flex-direction: column; gap: var(--space-4); }
+.comparison-stack__table { width: 100%; }
+.comparison-stack__table table { width: 100%; }
+
 .rating { display: inline-flex; align-items: center; gap: 4px; }
 .rating .star { color: var(--brand-warning); font-size: 14px; }
 .rating .star.empty { color: #d5d9e0; }
@@ -327,7 +333,7 @@ label { color: var(--text-primary); font-weight: 600; display: block; margin-bot
 .footer .newsletter input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); background: #ffffff; color: var(--text-secondary); margin-bottom: 10px; }
 .footer .newsletter button { width: 100%; }
 
-/* Plain text “Read Review” link styling for homepage tool highlight CTA */
+/* Plain text “Read Review” link styling across tables */
 .read-review-link {
   color: #00c27a;
   font-weight: 500;
@@ -338,6 +344,19 @@ label { color: var(--text-primary); font-weight: 600; display: block; margin-bot
 .read-review-link:hover {
   text-decoration: underline;
 }
+
+.website-link {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.website-link:hover { text-decoration: underline; }
+
+.single-tool-table { margin-top: var(--space-4); }
+.single-tool-table table { color: var(--text-secondary); background: var(--surface); border: 1px solid var(--border-color); }
+.single-tool-table th { color: var(--text-primary); background: rgba(0,0,0,0.02); }
+.single-tool-table table { min-width: 720px; }
 
 /* Utilities */
 .section-spacing { padding: var(--space-8) 0; }
