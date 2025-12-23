@@ -797,6 +797,14 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'name' => 'affiliate_url',
                     'type' => 'url',
                 ],
+                [
+                    'key' => 'field_homepage_section_title',
+                    'label' => 'Homepage Section Title',
+                    'name' => 'homepage_section_title',
+                    'type' => 'text',
+                    // Optional short display title used only when rendering homepage sections.
+                    'instructions' => 'Optional: overrides the display title on homepage sections only.',
+                ],
             ],
             'location' => [
                 [
@@ -941,4 +949,3 @@ add_filter( 'acf/load_field_groups', function ( $field_groups ) {
 
     return $field_groups;
 } );
-
