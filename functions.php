@@ -949,9 +949,9 @@ function aichatbotfree_render_comparison_rows( $items, $type = 'free', $show_web
         echo '<td>' . aichatbotfree_render_rating( $rating ) . '</td>';
         // Only render the Website column when both affiliate fields are present for this tool.
         if ( $has_site ) {
-            echo '<td><a class="website-link" href="' . esc_url( $affiliate['url'] ) . '" rel="nofollow noopener" target="_blank">' . esc_html( $affiliate['title'] ) . '</a></td>';
+            echo '<td><a class="website-link read-review-link cta-text-link" href="' . esc_url( $affiliate['url'] ) . '" rel="nofollow noopener" target="_blank">' . esc_html( $affiliate['title'] ) . '</a></td>';
         }
-        echo '<td' . $review_cell_attributes . '><a class="read-review-link" href="' . esc_url( $link ) . '">' . esc_html__( 'Read Review', 'aichatbotfree' ) . '</a></td>';
+        echo '<td' . $review_cell_attributes . '><a class="read-review-link cta-text-link" href="' . esc_url( $link ) . '">' . esc_html__( 'Read Review', 'aichatbotfree' ) . '</a></td>';
         echo '</tr>';
     }
 }

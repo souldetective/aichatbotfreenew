@@ -286,10 +286,18 @@ label { color: var(--text-primary); font-weight: 600; display: block; margin-bot
 .category-folders .card.folder p { margin: 12px 0; }
 .category-folders .card.folder a { margin-top: auto; display: inline-flex; }
 
+/* Featured pillar cards: balance excerpts and keep CTA placement aligned */
+.pillar-card { display: flex; flex-direction: column; gap: var(--space-3); }
+.pillar-card__excerpt { margin: 0; color: var(--text-secondary); }
+.pillar-card__footer { margin-top: auto; padding-top: var(--space-3); }
+
 /* Use cases and latest posts */
 .use-case-grid .card { display: flex; flex-direction: column; gap: 8px; min-height: 220px; }
 .use-case-icon { font-size: 26px; }
-.latest-posts article { display: grid; gap: 8px; padding: 14px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--surface); box-shadow: var(--shadow); color: var(--text-secondary); }
+/* Grid conversion for Latest Blog & Trends to replace the previous list layout */
+.latest-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); align-items: stretch; }
+.latest-posts .latest-card { display: flex; flex-direction: column; gap: var(--space-3); padding: 14px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--surface); box-shadow: var(--shadow); color: var(--text-secondary); }
+.latest-card__footer { margin-top: auto; padding-top: var(--space-3); }
 .latest-posts .meta { color: var(--text-secondary); font-size: 14px; }
 
 /* Trust */
@@ -333,25 +341,28 @@ label { color: var(--text-primary); font-weight: 600; display: block; margin-bot
 .footer .newsletter input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); background: #ffffff; color: var(--text-secondary); margin-bottom: 10px; }
 .footer .newsletter button { width: 100%; }
 
-/* Plain text “Read Review” link styling across tables */
-.read-review-link {
+/* CTA unification: reuse the comparison text-link style across all homepage CTAs and website links */
+.read-review-link,
+.cta-text-link,
+.website-link {
   color: #00c27a;
   font-weight: 500;
   text-decoration: none;
   font-size: 14px;
 }
 
-.read-review-link:hover {
+.read-review-link:hover,
+.cta-text-link:hover,
+.website-link:hover {
   text-decoration: underline;
+  color: #00c27a;
 }
 
-.website-link {
-  color: var(--primary);
-  font-weight: 600;
-  text-decoration: none;
+.cta-text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
-
-.website-link:hover { text-decoration: underline; }
 
 .single-tool-table { margin-top: var(--space-4); }
 .single-tool-table table { color: var(--text-secondary); background: var(--surface); border: 1px solid var(--border-color); }
@@ -387,7 +398,7 @@ label { color: var(--text-primary); font-weight: 600; display: block; margin-bot
 [data-theme="dark"] header.site-header { background: rgba(10, 26, 47, 0.9); border-bottom-color: var(--border-color); }
 [data-theme="dark"] .card,
 [data-theme="dark"] .hero-card,
-[data-theme="dark"] .latest-posts article,
+[data-theme="dark"] .latest-posts .latest-card,
 [data-theme="dark"] .trust,
 [data-theme="dark"] .category-folders .card.folder { background: var(--card); color: var(--text-secondary); }
 [data-theme="dark"] .comparison-table { background: var(--card); }

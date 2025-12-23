@@ -181,7 +181,8 @@ $paid_show_website = aichatbotfree_should_show_website_column( $paid_comparison 
                     echo '<span class="folder-label">' . esc_html( $category ? $category->name : __( 'Category', 'aichatbotfree' ) ) . '</span>';
                     echo '</div>';
                     echo '<p>' . esc_html( $desc ) . '</p>';
-                    echo '<a class="button secondary" href="' . esc_url( $link ) . '">' . esc_html__( 'View Guides', 'aichatbotfree' ) . '</a>';
+                    // Convert CTA to text link to align with the standard Read Review styling.
+                    echo '<a class="read-review-link cta-text-link" href="' . esc_url( $link ) . '">' . esc_html__( 'View Guides', 'aichatbotfree' ) . '</a>';
                     echo '</div>';
                 }
             } else {
@@ -206,10 +207,16 @@ $paid_show_website = aichatbotfree_should_show_website_column( $paid_comparison 
                 foreach ( $pillar_articles as $post ) {
                     setup_postdata( $post );
                     ?>
-                    <div class="card">
+                    <div class="card pillar-card">
                         <h3><?php the_title(); ?></h3>
-                        <p><?php echo esc_html( get_the_excerpt() ); ?></p>
-                        <a class="button secondary" href="<?php the_permalink(); ?>"><?php esc_html_e( 'Read Guide', 'aichatbotfree' ); ?></a>
+                        <?php
+                        // Apply a consistent excerpt length to keep cards visually balanced without truncating titles.
+                        $pillar_excerpt = wp_trim_words( get_the_excerpt(), 28, '…' );
+                        ?>
+                        <p class="pillar-card__excerpt"><?php echo esc_html( $pillar_excerpt ); ?></p>
+                        <div class="pillar-card__footer">
+                            <a class="read-review-link cta-text-link" href="<?php the_permalink(); ?>"><?php esc_html_e( 'Read Guide', 'aichatbotfree' ); ?></a>
+                        </div>
                     </div>
                     <?php
                 }
@@ -271,9 +278,9 @@ $paid_show_website = aichatbotfree_should_show_website_column( $paid_comparison 
                                 <td><?php echo esc_html( $best_for ); ?></td>
                                 <td><?php echo aichatbotfree_render_rating( $rating ); ?></td>
                                 <?php if ( $has_site ) : ?>
-                                    <td><a class="website-link" href="<?php echo esc_url( $affiliate['url'] ); ?>" rel="nofollow noopener" target="_blank"><?php echo esc_html( $affiliate['title'] ); ?></a></td>
+                                    <td><a class="website-link read-review-link cta-text-link" href="<?php echo esc_url( $affiliate['url'] ); ?>" rel="nofollow noopener" target="_blank"><?php echo esc_html( $affiliate['title'] ); ?></a></td>
                                 <?php endif; ?>
-                                <td<?php echo $review_cell_attributes; ?>><a class="read-review-link" href="<?php the_permalink(); ?>"><?php esc_html_e( 'Read Review', 'aichatbotfree' ); ?></a></td>
+                                <td<?php echo $review_cell_attributes; ?>><a class="read-review-link cta-text-link" href="<?php the_permalink(); ?>"><?php esc_html_e( 'Read Review', 'aichatbotfree' ); ?></a></td>
                             </tr>
                             <?php
                         }
@@ -374,7 +381,8 @@ $paid_show_website = aichatbotfree_should_show_website_column( $paid_comparison 
                     }
                     echo '<h3>' . esc_html( $case['title'] ?? '' ) . '</h3>';
                     echo '<p>' . esc_html( $case['description'] ?? '' ) . '</p>';
-                    echo '<a class="button secondary" href="' . esc_url( $link ) . '">' . esc_html__( 'View Use Case', 'aichatbotfree' ) . '</a>';
+                    // Switch to text-only CTA to mirror comparison table link styling.
+                    echo '<a class="read-review-link cta-text-link" href="' . esc_url( $link ) . '">' . esc_html__( 'View Use Case', 'aichatbotfree' ) . '</a>';
                     echo '</div>';
                 }
             } else {
@@ -407,11 +415,13 @@ $paid_show_website = aichatbotfree_should_show_website_column( $paid_comparison 
                 while ( $latest->have_posts() ) {
                     $latest->the_post();
                     ?>
-                    <article>
+                    <article class="latest-card">
                         <div class="meta"><?php echo esc_html( get_the_date() ); ?></div>
                         <h3><?php the_title(); ?></h3>
                         <p><?php echo esc_html( wp_trim_words( get_the_excerpt(), 22 ) ); ?></p>
-                        <a class="button secondary" href="<?php the_permalink(); ?>"><?php esc_html_e( 'Read Article', 'aichatbotfree' ); ?></a>
+                        <div class="latest-card__footer">
+                            <a class="read-review-link cta-text-link" href="<?php the_permalink(); ?>"><?php esc_html_e( 'Read Article', 'aichatbotfree' ); ?></a>
+                        </div>
                     </article>
                     <?php
                 }
