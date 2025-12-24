@@ -521,10 +521,10 @@ if ( ! function_exists( 'aichatbotfree_article_section_style_attr' ) ) {
                                         <td data-label="<?php esc_attr_e( 'AI Support', 'aichatbotfree' ); ?>"><?php echo esc_html( $ai ); ?></td>
                                         <td data-label="<?php esc_attr_e( 'Best For', 'aichatbotfree' ); ?>"><?php echo esc_html( $best ); ?></td>
                                     <td data-label="<?php esc_attr_e( 'Action', 'aichatbotfree' ); ?>">
-                                            <?php if ( $url && $btn ) : ?>
-                                                <a class="button secondary" href="<?php echo esc_url( $url ); ?>"><?php echo esc_html( $btn ); ?></a>
-                                            <?php endif; ?>
-                                        </td>
+                                        <?php if ( $url && $btn ) : ?>
+                                            <a class="read-review-link cta-text-link" href="<?php echo esc_url( $url ); ?>" rel="nofollow noopener" target="_blank"><?php echo esc_html( $btn ); ?></a>
+                                        <?php endif; ?>
+                                    </td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
