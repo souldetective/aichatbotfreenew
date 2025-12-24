@@ -481,6 +481,129 @@
                     ]
                 },
                 {
+                    "key": "layout_comparison_sections",
+                    "name": "comparison_sections",
+                    "label": "Comparison Sections",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_comparison_sections_flexible",
+                            "label": "Comparison Sections",
+                            "name": "comparison_sections",
+                            "type": "repeater",
+                            "layout": "block",
+                            "button_label": "Add Comparison Section",
+                            "sub_fields": [
+                                {
+                                    "key": "field_comparison_flexible_title",
+                                    "label": "Section Title",
+                                    "name": "comparison_title",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "field_comparison_flexible_intro",
+                                    "label": "Intro Paragraph",
+                                    "name": "comparison_intro",
+                                    "type": "wysiwyg",
+                                    "tabs": "visual",
+                                    "toolbar": "basic",
+                                    "media_upload": 0
+                                },
+                                {
+                                    "key": "field_comparison_flexible_feature_blocks",
+                                    "label": "Feature Blocks",
+                                    "name": "feature_blocks",
+                                    "type": "repeater",
+                                    "layout": "block",
+                                    "button_label": "Add Feature Block",
+                                    "sub_fields": [
+                                        {
+                                            "key": "field_comparison_flexible_feature_title",
+                                            "label": "Feature Title",
+                                            "name": "feature_title",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "key": "field_comparison_flexible_left_product_title",
+                                            "label": "Left Product Title",
+                                            "name": "left_product_title",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "key": "field_comparison_flexible_left_rows",
+                                            "label": "Left Product Rows",
+                                            "name": "left_product_rows",
+                                            "type": "repeater",
+                                            "layout": "table",
+                                            "button_label": "Add Row",
+                                            "sub_fields": [
+                                                {
+                                                    "key": "field_comparison_flexible_left_row_text",
+                                                    "label": "Left Row Text",
+                                                    "name": "left_row_text",
+                                                    "type": "text"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "key": "field_comparison_flexible_right_product_title",
+                                            "label": "Right Product Title",
+                                            "name": "right_product_title",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "key": "field_comparison_flexible_right_rows",
+                                            "label": "Right Product Rows",
+                                            "name": "right_product_rows",
+                                            "type": "repeater",
+                                            "layout": "table",
+                                            "button_label": "Add Row",
+                                            "sub_fields": [
+                                                {
+                                                    "key": "field_comparison_flexible_right_row_text",
+                                                    "label": "Right Row Text",
+                                                    "name": "right_row_text",
+                                                    "type": "text"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "key": "field_comparison_flexible_winner_label",
+                                            "label": "Winner Label",
+                                            "name": "winner_label",
+                                            "type": "text",
+                                            "instructions": "Shown only when the winner link is also provided."
+                                        },
+                                        {
+                                            "key": "field_comparison_flexible_winner_link",
+                                            "label": "Winner Website Link",
+                                            "name": "winner_link",
+                                            "type": "url",
+                                            "instructions": "Shown only when the winner label is also provided."
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "key": "field_comparison_sections_section_background",
+                            "label": "Section Background",
+                            "name": "section_background",
+                            "type": "color_picker",
+                            "instructions": "Override the background for this module.",
+                            "return_format": "string"
+                        },
+                        {
+                            "key": "field_comparison_sections_section_text_color",
+                            "label": "Section Text Color",
+                            "name": "section_text_color",
+                            "type": "color_picker",
+                            "instructions": "Override the text color for this module.",
+                            "return_format": "string"
+                        }
+                    ]
+                },
+                {
                     "key": "layout_comparison_table",
                     "name": "comparison_table",
                     "label": "Comparison Table",

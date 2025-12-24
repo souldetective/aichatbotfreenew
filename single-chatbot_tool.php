@@ -70,14 +70,13 @@
 </tbody>
 </table>
 </div>
-        <?php if ( function_exists( 'have_rows' ) && have_rows( 'comparison_sections' ) ) : ?>
-            <div class="comparison-sections-wrapper">
-                <?php get_template_part( 'template-parts/comparison-sections' ); ?>
-            </div>
-        <?php endif; ?>
         <?php if ( function_exists( 'have_rows' ) && have_rows( 'article_sections' ) ) : ?>
             <div class="article-sections">
                 <?php get_template_part( 'template-parts/article-sections' ); ?>
+            </div>
+        <?php elseif ( function_exists( 'have_rows' ) && have_rows( 'comparison_sections' ) ) : ?>
+            <div class="comparison-sections-wrapper">
+                <?php get_template_part( 'template-parts/comparison-sections' ); ?>
             </div>
         <?php endif; ?>
     </article>
