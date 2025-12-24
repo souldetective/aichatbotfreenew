@@ -271,7 +271,7 @@ label { color: var(--text-primary); font-weight: 600; display: block; margin-bot
 .comparison-feature__columns { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--space-4); align-items: start; }
 .comparison-feature__column { background: var(--surface-muted); border: 1px solid var(--border-color); border-radius: var(--radius); padding: var(--space-4); }
 .comparison-feature__column-title { margin: 0 0 var(--space-3); color: var(--text-primary); }
-.comparison-feature__list { margin: 0; padding-left: 18px; color: var(--text-secondary); display: grid; gap: var(--space-2); list-style: disc; }
+.comparison-feature__list { margin: 0; padding-left: 0; color: var(--text-secondary); display: grid; gap: var(--space-2); list-style: none; }
 .comparison-feature__list-item { line-height: 1.6; }
 .comparison-feature__winner { text-align: center; padding: var(--space-4) 0; }
 .comparison-feature__winner-link { color: #4caf50; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
