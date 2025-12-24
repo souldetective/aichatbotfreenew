@@ -53,20 +53,6 @@
             ?>
         </nav>
 
-        <nav class="footer-column" data-footer-column="social" aria-label="<?php esc_attr_e( 'Footer Social Links', 'aichatbotfree' ); ?>">
-            <h4><?php esc_html_e( 'Social', 'aichatbotfree' ); ?></h4>
-            <?php
-            wp_nav_menu(
-                [
-                    'theme_location' => 'footer_social',
-                    'container'      => false,
-                    'fallback_cb'    => '__return_empty_string',
-                    'menu_class'     => 'footer-menu',
-                    'depth'          => 1,
-                ]
-            );
-            ?>
-        </nav>
     </div>
 </footer>
 <?php wp_footer(); ?>
