@@ -298,6 +298,8 @@ label { color: var(--text-primary); font-weight: 600; display: block; margin-bot
 .hero-card { background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)); border: 1px solid rgba(255,255,255,0.05); padding: 22px; border-radius: var(--radius); box-shadow: var(--shadow); color: var(--muted); }
 .hero-card h3 { margin: 0 0 8px; color: var(--light); }
 .hero-card ul { padding-left: 18px; margin: 0; color: var(--muted); }
+.hero-card li.is-check { color: #00c27a; }
+.hero-card li.is-cross { color: #e53935; }
 
 /* Category folders */
 .category-folders .card.folder { position: relative; overflow: hidden; border: 1px solid var(--border-color); background: var(--surface); color: var(--text-secondary); box-shadow: var(--shadow); }

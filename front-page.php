@@ -149,8 +149,24 @@ $paid_show_website = aichatbotfree_should_show_website_column( $paid_comparison 
             <?php if ( $hero_reason_items ) : ?>
                 <ul>
                     <?php foreach ( $hero_reason_items as $reason ) : ?>
-                        <?php if ( empty( $reason['text'] ) ) { continue; } ?>
-                        <li><?php echo esc_html( $reason['text'] ); ?></li>
+                        <?php
+                        $reason_text   = trim( (string) ( $reason['text'] ?? '' ) );
+                        if ( '' === $reason_text ) {
+                            continue;
+                        }
+                        $reason_status = strtolower( (string) ( $reason['status'] ?? ( $reason['type'] ?? '' ) ) );
+                        if ( preg_match( '/^(check|cross)\\s*:\\s*(.+)$/i', $reason_text, $matches ) ) {
+                            $reason_status = strtolower( $matches[1] );
+                            $reason_text   = trim( $matches[2] );
+                        }
+                        $reason_class = '';
+                        if ( 'check' === $reason_status ) {
+                            $reason_class = 'is-check';
+                        } elseif ( 'cross' === $reason_status ) {
+                            $reason_class = 'is-cross';
+                        }
+                        ?>
+                        <li<?php echo $reason_class ? ' class="' . esc_attr( $reason_class ) . '"' : ''; ?>><?php echo esc_html( $reason_text ); ?></li>
                     <?php endforeach; ?>
                 </ul>
             <?php endif; ?>
