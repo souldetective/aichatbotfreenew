@@ -56,20 +56,25 @@
                                 <td data-label="<?php echo esc_attr( $label ); ?>"><?php echo esc_html( $value ); ?></td>
                             <?php endif; ?>
                         <?php endforeach; ?>
-                        <?php if ( $affiliate ) : ?>
-                            <td data-label="<?php esc_attr_e( 'Website', 'aichatbotfree' ); ?>">
-                                <a class="website-link cta-text-link" href="<?php echo esc_url( $affiliate ); ?>" target="_blank" rel="nofollow noopener">
-                                    <?php
-                                    // Fallback to legacy CTA text when no custom title is provided.
-                                    echo esc_html( $affiliate_title ? $affiliate_title : __( 'Get Started', 'aichatbotfree' ) );
-                                    ?>
-                                </a>
-                            </td>
-                        <?php endif; ?>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        <?php if ( $affiliate ) : ?>
+            <td data-label="<?php esc_attr_e( 'Website', 'aichatbotfree' ); ?>">
+                <a class="website-link cta-text-link" href="<?php echo esc_url( $affiliate ); ?>" target="_blank" rel="nofollow noopener">
+                    <?php
+                    // Fallback to legacy CTA text when no custom title is provided.
+                    echo esc_html( $affiliate_title ? $affiliate_title : __( 'Get Started', 'aichatbotfree' ) );
+                    ?>
+                </a>
+            </td>
+        <?php endif; ?>
+    </tr>
+</tbody>
+</table>
+</div>
+        <?php if ( function_exists( 'have_rows' ) && have_rows( 'comparison_sections' ) ) : ?>
+            <div class="comparison-sections-wrapper">
+                <?php get_template_part( 'template-parts/comparison-sections' ); ?>
+            </div>
+        <?php endif; ?>
         <?php if ( function_exists( 'have_rows' ) && have_rows( 'article_sections' ) ) : ?>
             <div class="article-sections">
                 <?php get_template_part( 'template-parts/article-sections' ); ?>

@@ -897,6 +897,16 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
             acf_add_local_field_group( $article_builder );
         }
     }
+
+    $comparison_sections_path = get_template_directory() . '/acf-json/group-comparison-sections.json';
+
+    if ( file_exists( $comparison_sections_path ) ) {
+        $comparison_sections_group = json_decode( file_get_contents( $comparison_sections_path ), true );
+
+        if ( is_array( $comparison_sections_group ) && isset( $comparison_sections_group['key'] ) ) {
+            acf_add_local_field_group( $comparison_sections_group );
+        }
+    }
 }
 
 /**
