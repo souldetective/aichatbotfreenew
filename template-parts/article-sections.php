@@ -483,6 +483,26 @@ if ( ! function_exists( 'aichatbotfree_article_section_style_attr' ) ) {
                 <?php
                 break;
 
+            case 'comparison_sections':
+                $comparison_sections = get_sub_field( 'comparison_sections' );
+
+                if ( empty( $comparison_sections ) ) {
+                    break;
+                }
+
+                $comparison_style_attr = aichatbotfree_article_section_style_attr();
+
+                get_template_part(
+                    'template-parts/comparison-sections',
+                    null,
+                    [
+                        'sections'           => $comparison_sections,
+                        'container_classes'  => 'article-section',
+                        'style_attr'         => $comparison_style_attr,
+                    ]
+                );
+                break;
+
             case 'comparison_table':
                 $rows = get_sub_field( 'table_rows' );
                 if ( empty( $rows ) ) {

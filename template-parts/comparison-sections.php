@@ -7,18 +7,93 @@
  * @package aichatbotfree
  */
 
-if ( ! function_exists( 'have_rows' ) || ! have_rows( 'comparison_sections' ) ) {
+$sections            = isset( $args['sections'] ) && is_array( $args['sections'] ) ? $args['sections'] : null;
+$container_tag       = isset( $args['container_tag'] ) && $args['container_tag'] ? $args['container_tag'] : 'section';
+$container_classes   = [ 'comparison-sections' ];
+$style_attr          = '';
+$style_attr_param    = isset( $args['style_attr'] ) ? $args['style_attr'] : '';
+$additional_classes  = isset( $args['container_classes'] ) ? $args['container_classes'] : '';
+
+if ( $additional_classes ) {
+	if ( is_array( $additional_classes ) ) {
+		$container_classes = array_merge( $container_classes, $additional_classes );
+	} elseif ( is_string( $additional_classes ) ) {
+		$container_classes[] = $additional_classes;
+	}
+}
+
+if ( '' !== $style_attr_param ) {
+	$style_attr = ' ' . trim( (string) $style_attr_param );
+}
+
+if ( ! $sections && function_exists( 'have_rows' ) && have_rows( 'comparison_sections' ) ) {
+	$sections = [];
+
+	while ( have_rows( 'comparison_sections' ) ) {
+		the_row();
+
+		$feature_blocks = [];
+
+		if ( have_rows( 'feature_blocks' ) ) {
+			while ( have_rows( 'feature_blocks' ) ) {
+				the_row();
+
+				$left_rows  = [];
+				$right_rows = [];
+
+				if ( have_rows( 'left_product_rows' ) ) {
+					while ( have_rows( 'left_product_rows' ) ) {
+						the_row();
+						$left_row_text = get_sub_field( 'left_row_text' );
+
+						if ( $left_row_text ) {
+							$left_rows[] = $left_row_text;
+						}
+					}
+				}
+
+				if ( have_rows( 'right_product_rows' ) ) {
+					while ( have_rows( 'right_product_rows' ) ) {
+						the_row();
+						$right_row_text = get_sub_field( 'right_row_text' );
+
+						if ( $right_row_text ) {
+							$right_rows[] = $right_row_text;
+						}
+					}
+				}
+
+				$feature_blocks[] = [
+					'feature_title'      => get_sub_field( 'feature_title' ),
+					'left_product_title' => get_sub_field( 'left_product_title' ),
+					'right_product_title'=> get_sub_field( 'right_product_title' ),
+					'left_product_rows'  => $left_rows,
+					'right_product_rows' => $right_rows,
+					'winner_label'       => get_sub_field( 'winner_label' ),
+					'winner_link'        => get_sub_field( 'winner_link' ),
+				];
+			}
+		}
+
+		$sections[] = [
+			'comparison_title' => get_sub_field( 'comparison_title' ),
+			'comparison_intro' => get_sub_field( 'comparison_intro' ),
+			'feature_blocks'   => $feature_blocks,
+		];
+	}
+}
+
+if ( empty( $sections ) ) {
 	return;
 }
 ?>
 
-<section class="comparison-sections">
+<<?php echo esc_attr( $container_tag ); ?> class="<?php echo esc_attr( implode( ' ', array_filter( $container_classes ) ) ); ?>"<?php echo $style_attr; ?>>
 	<?php
-	while ( have_rows( 'comparison_sections' ) ) :
-		the_row();
-
-		$section_title = get_sub_field( 'comparison_title' );
-		$section_intro = get_sub_field( 'comparison_intro' );
+	foreach ( $sections as $section ) :
+		$section_title = isset( $section['comparison_title'] ) ? $section['comparison_title'] : '';
+		$section_intro = isset( $section['comparison_intro'] ) ? $section['comparison_intro'] : '';
+		$features      = isset( $section['feature_blocks'] ) && is_array( $section['feature_blocks'] ) ? $section['feature_blocks'] : [];
 		?>
 		<article class="comparison-section">
 			<?php if ( $section_title ) : ?>
@@ -31,17 +106,17 @@ if ( ! function_exists( 'have_rows' ) || ! have_rows( 'comparison_sections' ) ) 
 				</div>
 			<?php endif; ?>
 
-			<?php if ( have_rows( 'feature_blocks' ) ) : ?>
+			<?php if ( ! empty( $features ) ) : ?>
 				<div class="comparison-section__features">
 					<?php
-					while ( have_rows( 'feature_blocks' ) ) :
-						the_row();
-
-						$feature_title = get_sub_field( 'feature_title' );
-						$left_title    = get_sub_field( 'left_product_title' );
-						$right_title   = get_sub_field( 'right_product_title' );
-						$winner_label  = get_sub_field( 'winner_label' );
-						$winner_link   = get_sub_field( 'winner_link' );
+					foreach ( $features as $feature_block ) :
+						$feature_title = isset( $feature_block['feature_title'] ) ? $feature_block['feature_title'] : '';
+						$left_title    = isset( $feature_block['left_product_title'] ) ? $feature_block['left_product_title'] : '';
+						$right_title   = isset( $feature_block['right_product_title'] ) ? $feature_block['right_product_title'] : '';
+						$winner_label  = isset( $feature_block['winner_label'] ) ? $feature_block['winner_label'] : '';
+						$winner_link   = isset( $feature_block['winner_link'] ) ? $feature_block['winner_link'] : '';
+						$left_rows     = isset( $feature_block['left_product_rows'] ) && is_array( $feature_block['left_product_rows'] ) ? $feature_block['left_product_rows'] : [];
+						$right_rows    = isset( $feature_block['right_product_rows'] ) && is_array( $feature_block['right_product_rows'] ) ? $feature_block['right_product_rows'] : [];
 						?>
 						<div class="comparison-feature">
 							<?php if ( $feature_title ) : ?>
@@ -54,20 +129,16 @@ if ( ! function_exists( 'have_rows' ) || ! have_rows( 'comparison_sections' ) ) 
 										<h4 class="comparison-feature__column-title"><?php echo esc_html( $left_title ); ?></h4>
 									<?php endif; ?>
 
-									<?php if ( have_rows( 'left_product_rows' ) ) : ?>
+									<?php if ( ! empty( $left_rows ) ) : ?>
 										<ul class="comparison-feature__list">
 											<?php
-											while ( have_rows( 'left_product_rows' ) ) :
-												the_row();
-												$left_row_text = get_sub_field( 'left_row_text' );
-
+											foreach ( $left_rows as $left_row_text ) :
 												if ( ! $left_row_text ) {
 													continue;
 												}
 												?>
 												<li class="comparison-feature__list-item"><?php echo esc_html( $left_row_text ); ?></li>
-												<?php
-											endwhile;
+											<?php endforeach; ?>
 											?>
 										</ul>
 									<?php endif; ?>
@@ -78,20 +149,16 @@ if ( ! function_exists( 'have_rows' ) || ! have_rows( 'comparison_sections' ) ) 
 										<h4 class="comparison-feature__column-title"><?php echo esc_html( $right_title ); ?></h4>
 									<?php endif; ?>
 
-									<?php if ( have_rows( 'right_product_rows' ) ) : ?>
+									<?php if ( ! empty( $right_rows ) ) : ?>
 										<ul class="comparison-feature__list">
 											<?php
-											while ( have_rows( 'right_product_rows' ) ) :
-												the_row();
-												$right_row_text = get_sub_field( 'right_row_text' );
-
+											foreach ( $right_rows as $right_row_text ) :
 												if ( ! $right_row_text ) {
 													continue;
 												}
 												?>
 												<li class="comparison-feature__list-item"><?php echo esc_html( $right_row_text ); ?></li>
-												<?php
-											endwhile;
+											<?php endforeach; ?>
 											?>
 										</ul>
 									<?php endif; ?>
@@ -113,6 +180,6 @@ if ( ! function_exists( 'have_rows' ) || ! have_rows( 'comparison_sections' ) ) 
 			<?php endif; ?>
 		</article>
 		<?php
-	endwhile;
+	endforeach;
 	?>
-</section>
+</<?php echo esc_attr( $container_tag ); ?>>
