@@ -375,6 +375,14 @@ label { color: var(--text-primary); font-weight: 600; display: block; margin-bot
   color: var(--link-hover);
 }
 
+.archive .grid.cards .card h3 a {
+  color: #9ab8cc;
+}
+
+.archive .grid.cards .card h3 a:hover {
+  color: #fff;
+}
+
 .card-excerpt,
 .pillar-card__excerpt {
   /* Clamp card summaries to keep grid heights balanced without truncating titles. */
