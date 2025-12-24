@@ -139,7 +139,6 @@ if ( empty( $sections ) ) {
 												?>
 												<li class="comparison-feature__list-item"><?php echo esc_html( $left_row_text ); ?></li>
 											<?php endforeach; ?>
-											?>
 										</ul>
 									<?php endif; ?>
 								</div>
@@ -159,7 +158,6 @@ if ( empty( $sections ) ) {
 												?>
 												<li class="comparison-feature__list-item"><?php echo esc_html( $right_row_text ); ?></li>
 											<?php endforeach; ?>
-											?>
 										</ul>
 									<?php endif; ?>
 								</div>
@@ -174,7 +172,7 @@ if ( empty( $sections ) ) {
 							<?php endif; ?>
 						</div>
 						<?php
-					endwhile;
+					endforeach;
 					?>
 				</div>
 			<?php endif; ?>
