@@ -7,7 +7,6 @@ if ( ! defined( 'AI_CHATBOTFREE_VERSION' ) ) {
     define( 'AI_CHATBOTFREE_VERSION', '1.0.0' );
 }
 
-require_once get_template_directory() . '/inc/class-mega-menu-walker.php';
 require_once get_template_directory() . '/inc/customizer.php';
 
 add_action( 'after_setup_theme', function () {

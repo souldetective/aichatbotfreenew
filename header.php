@@ -29,7 +29,6 @@
                     'menu_class'     => 'primary-menu',
                     'fallback_cb'    => '__return_empty_string',
                     'depth'          => 3,
-                    'walker'         => new Aichatbotfree_Mega_Menu_Walker(),
                 ]
             );
             ?>
