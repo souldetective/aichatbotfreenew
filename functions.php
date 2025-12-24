@@ -7,10 +7,22 @@ if ( ! defined( 'AI_CHATBOTFREE_VERSION' ) ) {
     define( 'AI_CHATBOTFREE_VERSION', '1.0.0' );
 }
 
+require_once get_template_directory() . '/inc/class-mega-menu-walker.php';
+require_once get_template_directory() . '/inc/customizer.php';
+
 add_action( 'after_setup_theme', function () {
     add_theme_support( 'title-tag' );
     add_theme_support( 'post-thumbnails' );
     add_theme_support( 'html5', [ 'search-form', 'comment-form', 'comment-list', 'gallery', 'caption', 'style', 'script' ] );
+    add_theme_support(
+        'custom-logo',
+        [
+            'height'      => 120,
+            'width'       => 320,
+            'flex-width'  => true,
+            'flex-height' => true,
+        ]
+    );
 
     register_nav_menus(
         [
@@ -26,6 +38,7 @@ add_action( 'after_setup_theme', function () {
 add_action( 'wp_enqueue_scripts', function () {
     wp_enqueue_style( 'aichatbotfree-style', get_stylesheet_uri(), [], AI_CHATBOTFREE_VERSION );
     wp_enqueue_style( 'aichatbotfree-main', get_template_directory_uri() . '/assets/css/main.css', [], AI_CHATBOTFREE_VERSION );
+    wp_enqueue_style( 'aichatbotfree-navigation', get_template_directory_uri() . '/assets/css/navigation.css', [], AI_CHATBOTFREE_VERSION );
     wp_enqueue_style( 'aichatbotfree-article-sections', get_template_directory_uri() . '/assets/css/style-article-sections.css', [], AI_CHATBOTFREE_VERSION );
 
     wp_enqueue_script(
@@ -35,6 +48,17 @@ add_action( 'wp_enqueue_scripts', function () {
         AI_CHATBOTFREE_VERSION,
         true
     );
+
+    $footer_logo_width = absint( get_theme_mod( 'aichatbotfree_footer_logo_max_width', 180 ) );
+
+    if ( $footer_logo_width ) {
+        $footer_css = sprintf(
+            '.site-footer .footer-logo img{max-width:%1$dpx;}',
+            $footer_logo_width
+        );
+
+        wp_add_inline_style( 'aichatbotfree-navigation', $footer_css );
+    }
 });
 
 // Register a dedicated options page when ACF Pro is available.
@@ -115,6 +139,45 @@ add_action( 'admin_menu', function () {
         }
     );
 } );
+
+/**
+ * Return the footer branding logo markup with a homepage link fallback.
+ *
+ * @return string
+ */
+function aichatbotfree_get_footer_logo_html() {
+    $footer_logo_id = absint( get_theme_mod( 'aichatbotfree_footer_logo' ) );
+
+    if ( $footer_logo_id ) {
+        $logo = wp_get_attachment_image(
+            $footer_logo_id,
+            'full',
+            false,
+            [
+                'class' => 'footer-brand__image',
+                'loading' => 'lazy',
+            ]
+        );
+
+        if ( $logo ) {
+            return sprintf(
+                '<a class="footer-logo-link" href="%1$s">%2$s</a>',
+                esc_url( home_url( '/' ) ),
+                $logo
+            );
+        }
+    }
+
+    if ( has_custom_logo() ) {
+        return get_custom_logo();
+    }
+
+    return sprintf(
+        '<a class="footer-logo-link" href="%1$s">%2$s</a>',
+        esc_url( home_url( '/' ) ),
+        esc_html( get_bloginfo( 'name' ) )
+    );
+}
 
 /**
  * Safely retrieve ACF fields with sensible fallbacks when ACF is not active.
