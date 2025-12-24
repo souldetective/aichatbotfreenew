@@ -6,6 +6,12 @@
             <div class="meta"><?php echo esc_html( get_the_date() ); ?></div>
             <div class="entry-content"><?php the_content(); ?></div>
 
+            <?php if ( function_exists( 'have_rows' ) && have_rows( 'comparison_sections' ) ) : ?>
+                <div class="comparison-sections-wrapper">
+                    <?php get_template_part( 'template-parts/comparison-sections' ); ?>
+                </div>
+            <?php endif; ?>
+
             <?php if ( function_exists( 'have_rows' ) && have_rows( 'article_sections' ) ) : ?>
                 <?php get_template_part( 'template-parts/article-sections' ); ?>
             <?php endif; ?>
