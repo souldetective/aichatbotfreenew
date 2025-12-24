@@ -86,6 +86,42 @@ if ( ! $sections && function_exists( 'have_rows' ) && have_rows( 'comparison_sec
 if ( empty( $sections ) ) {
 	return;
 }
+
+if ( ! function_exists( 'aichatbotfree_comparison_extract_rows' ) ) {
+	/**
+	 * Extract sanitized row text from repeater arrays or raw string values.
+	 *
+	 * @param array|string $rows     Row data from ACF or manual args.
+	 * @param string       $text_key Field key to pull from repeater rows.
+	 *
+	 * @return array
+	 */
+	function aichatbotfree_comparison_extract_rows( $rows, $text_key ) {
+		if ( empty( $rows ) || ! is_array( $rows ) ) {
+			return [];
+		}
+
+		$sanitized_rows = [];
+
+		foreach ( $rows as $row ) {
+			$text_value = '';
+
+			if ( is_array( $row ) && isset( $row[ $text_key ] ) ) {
+				$text_value = $row[ $text_key ];
+			} elseif ( ! is_array( $row ) && ! is_object( $row ) ) {
+				$text_value = $row;
+			}
+
+			$text_value = trim( (string) $text_value );
+
+			if ( '' !== $text_value ) {
+				$sanitized_rows[] = $text_value;
+			}
+		}
+
+		return $sanitized_rows;
+	}
+}
 ?>
 
 <<?php echo esc_attr( $container_tag ); ?> class="<?php echo esc_attr( implode( ' ', array_filter( $container_classes ) ) ); ?>"<?php echo $style_attr; ?>>
@@ -115,8 +151,8 @@ if ( empty( $sections ) ) {
 						$right_title   = isset( $feature_block['right_product_title'] ) ? $feature_block['right_product_title'] : '';
 						$winner_label  = isset( $feature_block['winner_label'] ) ? $feature_block['winner_label'] : '';
 						$winner_link   = isset( $feature_block['winner_link'] ) ? $feature_block['winner_link'] : '';
-						$left_rows     = isset( $feature_block['left_product_rows'] ) && is_array( $feature_block['left_product_rows'] ) ? $feature_block['left_product_rows'] : [];
-						$right_rows    = isset( $feature_block['right_product_rows'] ) && is_array( $feature_block['right_product_rows'] ) ? $feature_block['right_product_rows'] : [];
+						$left_rows     = aichatbotfree_comparison_extract_rows( isset( $feature_block['left_product_rows'] ) ? $feature_block['left_product_rows'] : [], 'left_row_text' );
+						$right_rows    = aichatbotfree_comparison_extract_rows( isset( $feature_block['right_product_rows'] ) ? $feature_block['right_product_rows'] : [], 'right_row_text' );
 						?>
 						<div class="comparison-feature">
 							<?php if ( $feature_title ) : ?>

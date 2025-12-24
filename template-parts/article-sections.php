@@ -1001,41 +1001,60 @@ if ( $faq_schema_json ) :
     if (!typeAccordions.length) return;
 
     typeAccordions.forEach(function(group){
-        const items = group.querySelectorAll('.chatbot-type-accordion-item');
+        const items = Array.from(group.querySelectorAll('.chatbot-type-accordion-item'));
+        if (!items.length) return;
 
-        items.forEach(function(item){
+        const openItem = function(target, bodyEl, headerEl){
+            target.classList.add('open');
+            if (headerEl) {
+                headerEl.setAttribute('aria-expanded', 'true');
+            }
+            if (bodyEl) {
+                bodyEl.style.maxHeight = bodyEl.scrollHeight + 'px';
+            }
+        };
+
+        const closeItem = function(target, bodyEl, headerEl){
+            target.classList.remove('open');
+            if (headerEl) {
+                headerEl.setAttribute('aria-expanded', 'false');
+            }
+            if (bodyEl) {
+                bodyEl.style.maxHeight = '0px';
+            }
+        };
+
+        items.forEach(function(item, index){
             const header = item.querySelector('.chatbot-type-accordion-header');
             const body   = item.querySelector('.chatbot-type-accordion-body');
             if (!header || !body) return;
 
-            body.style.maxHeight = '0px';
+            closeItem(item, body, header);
 
             header.addEventListener('click', function(){
+                const isFirst = index === 0;
                 const isOpen = item.classList.contains('open');
 
-                items.forEach(function(other){
-                    const otherHeader = other.querySelector('.chatbot-type-accordion-header');
-                    const otherBody   = other.querySelector('.chatbot-type-accordion-body');
-                    if (otherHeader) {
-                        otherHeader.setAttribute('aria-expanded', 'false');
-                    }
-                    if (otherBody) {
-                        otherBody.style.maxHeight = '0px';
-                    }
-                    other.classList.remove('open');
-                });
+                if (isFirst) {
+                    openItem(item, body, header);
+                    return;
+                }
 
-                if (!isOpen) {
-                    item.classList.add('open');
-                    header.setAttribute('aria-expanded', 'true');
-                    body.style.maxHeight = body.scrollHeight + 'px';
+                if (isOpen) {
+                    closeItem(item, body, header);
                 } else {
-                    item.classList.remove('open');
-                    header.setAttribute('aria-expanded', 'false');
-                    body.style.maxHeight = '0px';
+                    openItem(item, body, header);
                 }
             });
         });
+
+        const firstItem = items[0];
+        const firstHeader = firstItem ? firstItem.querySelector('.chatbot-type-accordion-header') : null;
+        const firstBody   = firstItem ? firstItem.querySelector('.chatbot-type-accordion-body') : null;
+
+        if (firstItem && firstHeader && firstBody) {
+            openItem(firstItem, firstBody, firstHeader);
+        }
     });
 })();
 </script>
