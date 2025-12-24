@@ -1269,6 +1269,13 @@
                 "operator": "==",
                 "value": "post"
             }
+        ],
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "chatbot_tool"
+            }
         ]
     ],
     "position": "normal",
@@ -1279,5 +1286,5 @@
     "active": true,
     "description": "Flexible article builder for AI chatbot content.",
     "show_in_rest": 0,
-    "modified": 1733613600
+    "modified": 1766607614
 }
