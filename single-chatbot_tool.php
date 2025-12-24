@@ -13,6 +13,8 @@
         $best_for        = aichatbotfree_get_field( 'best_for' );
         $affiliate       = aichatbotfree_get_field( 'affiliate_url' );
         $affiliate_title = aichatbotfree_get_field( 'affiliate_link_title' );
+        $star_rating     = aichatbotfree_get_field( 'star_rating' );
+        $rating_note     = aichatbotfree_get_field( 'rating_note' );
         $table_points    = [
             __( 'Pricing (from /month)', 'aichatbotfree' ) => $pricing,
             __( 'Free Plan Limits', 'aichatbotfree' )      => $free,
@@ -21,6 +23,18 @@
             __( 'Best For', 'aichatbotfree' )              => $best_for,
         ];
         ?>
+        <?php if ( ( is_numeric( $star_rating ) && '' !== $star_rating ) || $rating_note ) : ?>
+            <div class="tool-rating-block">
+                <?php if ( is_numeric( $star_rating ) && '' !== $star_rating ) : ?>
+                    <div class="tool-rating-stars">
+                        <?php echo aichatbotfree_render_rating( (float) $star_rating ); ?>
+                    </div>
+                <?php endif; ?>
+                <?php if ( $rating_note ) : ?>
+                    <p class="tool-rating-note"><?php echo esc_html( $rating_note ); ?></p>
+                <?php endif; ?>
+            </div>
+        <?php endif; ?>
         <div class="responsive-table single-tool-table">
             <table>
                 <thead>
@@ -56,6 +70,11 @@
                 </tbody>
             </table>
         </div>
+        <?php if ( function_exists( 'have_rows' ) && have_rows( 'article_sections' ) ) : ?>
+            <div class="article-sections">
+                <?php get_template_part( 'template-parts/article-sections' ); ?>
+            </div>
+        <?php endif; ?>
     </article>
 <?php endwhile; endif; ?>
 </div>
