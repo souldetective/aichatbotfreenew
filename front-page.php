@@ -254,60 +254,62 @@ $paid_show_website = aichatbotfree_should_show_website_column( $paid_comparison 
             <?php endif; ?>
         </div>
         <div class="card">
-            <table class="comparison-table">
-                <thead>
-                    <tr>
-                        <th><?php echo esc_html( $tool_headers['tool'] ?? __( 'Tool', 'aichatbotfree' ) ); ?></th>
-                        <th><?php echo esc_html( $tool_headers['free_plan'] ?? __( 'Free Plan', 'aichatbotfree' ) ); ?></th>
-                        <th><?php echo esc_html( $tool_headers['channels'] ?? __( 'Channels', 'aichatbotfree' ) ); ?></th>
-                        <th><?php echo esc_html( $tool_headers['ai_support'] ?? __( 'AI Support', 'aichatbotfree' ) ); ?></th>
-                        <th><?php echo esc_html( $tool_headers['best_for'] ?? __( 'Best For', 'aichatbotfree' ) ); ?></th>
-                        <th><?php echo esc_html( $tool_headers['rating'] ?? __( 'Rating', 'aichatbotfree' ) ); ?></th>
-                        <?php if ( $highlight_has_website ) : ?>
-                            <th><?php esc_html_e( 'Website', 'aichatbotfree' ); ?></th>
-                        <?php endif; ?>
-                        <th><?php esc_html_e( 'Read Review', 'aichatbotfree' ); ?></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    if ( $tool_highlight ) {
-                        foreach ( $tool_highlight as $post ) {
-                            setup_postdata( $post );
-                            $free_plan = aichatbotfree_get_field( 'free_limits', $post->ID );
-                            $channels  = aichatbotfree_get_field( 'supported_channels', $post->ID );
-                            $ai        = aichatbotfree_get_field( 'ai_support', $post->ID );
-                            $best_for  = aichatbotfree_get_field( 'best_for', $post->ID );
-                            $rating    = aichatbotfree_get_field( 'star_rating', $post->ID );
-                            $affiliate = aichatbotfree_get_affiliate_link_data( get_the_ID() );
-                            $has_site  = $highlight_has_website && $affiliate['url'] && $affiliate['title'];
-                            // When the Website column is enabled but data is missing, merge the CTA cell to avoid empty cells.
-                            $review_cell_attributes = $highlight_has_website && ! $has_site ? ' colspan="2"' : '';
-                            // Prefer the homepage-specific title when provided; fall back to the normal post title.
-                            $homepage_title = get_field( 'homepage_section_title', get_the_ID() );
-                            ?>
-                            <tr>
-                                <td><?php echo esc_html( $homepage_title ?: get_the_title() ); ?></td>
-                                <td><?php echo esc_html( $free_plan ); ?></td>
-                                <td><?php echo esc_html( $channels ); ?></td>
-                                <td><?php echo esc_html( $ai ); ?></td>
-                                <td><?php echo esc_html( $best_for ); ?></td>
-                                <td><?php echo aichatbotfree_render_rating( $rating ); ?></td>
-                                <?php if ( $has_site ) : ?>
-                                    <td><a class="website-link read-review-link cta-text-link" href="<?php echo esc_url( $affiliate['url'] ); ?>" rel="nofollow noopener" target="_blank"><?php echo esc_html( $affiliate['title'] ); ?></a></td>
-                                <?php endif; ?>
-                                <td<?php echo $review_cell_attributes; ?>><a class="read-review-link cta-text-link" href="<?php the_permalink(); ?>"><?php esc_html_e( 'Read Review', 'aichatbotfree' ); ?></a></td>
-                            </tr>
-                            <?php
+            <div class="responsive-table">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th><?php echo esc_html( $tool_headers['tool'] ?? __( 'Tool', 'aichatbotfree' ) ); ?></th>
+                            <th><?php echo esc_html( $tool_headers['free_plan'] ?? __( 'Free Plan', 'aichatbotfree' ) ); ?></th>
+                            <th><?php echo esc_html( $tool_headers['channels'] ?? __( 'Channels', 'aichatbotfree' ) ); ?></th>
+                            <th><?php echo esc_html( $tool_headers['ai_support'] ?? __( 'AI Support', 'aichatbotfree' ) ); ?></th>
+                            <th><?php echo esc_html( $tool_headers['best_for'] ?? __( 'Best For', 'aichatbotfree' ) ); ?></th>
+                            <th><?php echo esc_html( $tool_headers['rating'] ?? __( 'Rating', 'aichatbotfree' ) ); ?></th>
+                            <?php if ( $highlight_has_website ) : ?>
+                                <th><?php esc_html_e( 'Website', 'aichatbotfree' ); ?></th>
+                            <?php endif; ?>
+                            <th><?php esc_html_e( 'Read Review', 'aichatbotfree' ); ?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        if ( $tool_highlight ) {
+                            foreach ( $tool_highlight as $post ) {
+                                setup_postdata( $post );
+                                $free_plan = aichatbotfree_get_field( 'free_limits', $post->ID );
+                                $channels  = aichatbotfree_get_field( 'supported_channels', $post->ID );
+                                $ai        = aichatbotfree_get_field( 'ai_support', $post->ID );
+                                $best_for  = aichatbotfree_get_field( 'best_for', $post->ID );
+                                $rating    = aichatbotfree_get_field( 'star_rating', $post->ID );
+                                $affiliate = aichatbotfree_get_affiliate_link_data( get_the_ID() );
+                                $has_site  = $highlight_has_website && $affiliate['url'] && $affiliate['title'];
+                                // When the Website column is enabled but data is missing, merge the CTA cell to avoid empty cells.
+                                $review_cell_attributes = $highlight_has_website && ! $has_site ? ' colspan="2"' : '';
+                                // Prefer the homepage-specific title when provided; fall back to the normal post title.
+                                $homepage_title = get_field( 'homepage_section_title', get_the_ID() );
+                                ?>
+                                <tr>
+                                    <td><?php echo esc_html( $homepage_title ?: get_the_title() ); ?></td>
+                                    <td><?php echo esc_html( $free_plan ); ?></td>
+                                    <td><?php echo esc_html( $channels ); ?></td>
+                                    <td><?php echo esc_html( $ai ); ?></td>
+                                    <td><?php echo esc_html( $best_for ); ?></td>
+                                    <td><?php echo aichatbotfree_render_rating( $rating ); ?></td>
+                                    <?php if ( $has_site ) : ?>
+                                        <td><a class="website-link read-review-link cta-text-link" href="<?php echo esc_url( $affiliate['url'] ); ?>" rel="nofollow noopener" target="_blank"><?php echo esc_html( $affiliate['title'] ); ?></a></td>
+                                    <?php endif; ?>
+                                    <td<?php echo $review_cell_attributes; ?>><a class="read-review-link cta-text-link" href="<?php the_permalink(); ?>"><?php esc_html_e( 'Read Review', 'aichatbotfree' ); ?></a></td>
+                                </tr>
+                                <?php
+                            }
+                            wp_reset_postdata();
+                        } else {
+                            $highlight_columns = 7 + ( $highlight_has_website ? 1 : 0 );
+                            echo '<tr><td colspan="' . esc_attr( $highlight_columns ) . '">' . esc_html__( 'Choose chatbot tools via taxonomies or manual picks in Homepage Options.', 'aichatbotfree' ) . '</td></tr>';
                         }
-                        wp_reset_postdata();
-                    } else {
-                        $highlight_columns = 7 + ( $highlight_has_website ? 1 : 0 );
-                        echo '<tr><td colspan="' . esc_attr( $highlight_columns ) . '">' . esc_html__( 'Choose chatbot tools via taxonomies or manual picks in Homepage Options.', 'aichatbotfree' ) . '</td></tr>';
-                    }
-                    ?>
-                </tbody>
-            </table>
+                        ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </section>
@@ -321,45 +323,49 @@ $paid_show_website = aichatbotfree_should_show_website_column( $paid_comparison 
         <div class="comparison-stack__tables">
             <div class="card comparison-stack__table">
                 <h3><?php esc_html_e( 'Free Plan Comparison', 'aichatbotfree' ); ?></h3>
-                <table class="comparison-table">
-                    <thead>
-                        <tr>
-                            <th><?php echo esc_html( $free_headers['tool'] ?? __( 'Tool', 'aichatbotfree' ) ); ?></th>
-                            <th><?php echo esc_html( $free_headers['plan'] ?? __( 'Free Plan', 'aichatbotfree' ) ); ?></th>
-                            <th><?php echo esc_html( $free_headers['channels'] ?? __( 'Channels', 'aichatbotfree' ) ); ?></th>
-                            <th><?php echo esc_html( $free_headers['ai'] ?? __( 'AI', 'aichatbotfree' ) ); ?></th>
-                            <th><?php echo esc_html( $free_headers['rating'] ?? __( 'Rating', 'aichatbotfree' ) ); ?></th>
-                            <?php if ( $free_show_website ) : ?>
-                                <th><?php esc_html_e( 'Website', 'aichatbotfree' ); ?></th>
-                            <?php endif; ?>
-                            <th><?php esc_html_e( 'Read Review', 'aichatbotfree' ); ?></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php aichatbotfree_render_comparison_rows( $free_comparison, 'free', $free_show_website ); ?>
-                    </tbody>
-                </table>
+                <div class="responsive-table">
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th><?php echo esc_html( $free_headers['tool'] ?? __( 'Tool', 'aichatbotfree' ) ); ?></th>
+                                <th><?php echo esc_html( $free_headers['plan'] ?? __( 'Free Plan', 'aichatbotfree' ) ); ?></th>
+                                <th><?php echo esc_html( $free_headers['channels'] ?? __( 'Channels', 'aichatbotfree' ) ); ?></th>
+                                <th><?php echo esc_html( $free_headers['ai'] ?? __( 'AI', 'aichatbotfree' ) ); ?></th>
+                                <th><?php echo esc_html( $free_headers['rating'] ?? __( 'Rating', 'aichatbotfree' ) ); ?></th>
+                                <?php if ( $free_show_website ) : ?>
+                                    <th><?php esc_html_e( 'Website', 'aichatbotfree' ); ?></th>
+                                <?php endif; ?>
+                                <th><?php esc_html_e( 'Read Review', 'aichatbotfree' ); ?></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php aichatbotfree_render_comparison_rows( $free_comparison, 'free', $free_show_website ); ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div class="card comparison-stack__table">
                 <h3><?php esc_html_e( 'Paid Plan Comparison', 'aichatbotfree' ); ?></h3>
-                <table class="comparison-table">
-                    <thead>
-                        <tr>
-                            <th><?php echo esc_html( $paid_headers['tool'] ?? __( 'Tool', 'aichatbotfree' ) ); ?></th>
-                            <th><?php echo esc_html( $paid_headers['price'] ?? __( 'Starting At', 'aichatbotfree' ) ); ?></th>
-                            <th><?php echo esc_html( $paid_headers['channels'] ?? __( 'Channels', 'aichatbotfree' ) ); ?></th>
-                            <th><?php echo esc_html( $paid_headers['ai'] ?? __( 'AI', 'aichatbotfree' ) ); ?></th>
-                            <th><?php echo esc_html( $paid_headers['rating'] ?? __( 'Rating', 'aichatbotfree' ) ); ?></th>
-                            <?php if ( $paid_show_website ) : ?>
-                                <th><?php esc_html_e( 'Website', 'aichatbotfree' ); ?></th>
-                            <?php endif; ?>
-                            <th><?php esc_html_e( 'Read Review', 'aichatbotfree' ); ?></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php aichatbotfree_render_comparison_rows( $paid_comparison, 'paid', $paid_show_website ); ?>
-                    </tbody>
-                </table>
+                <div class="responsive-table">
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th><?php echo esc_html( $paid_headers['tool'] ?? __( 'Tool', 'aichatbotfree' ) ); ?></th>
+                                <th><?php echo esc_html( $paid_headers['price'] ?? __( 'Starting At', 'aichatbotfree' ) ); ?></th>
+                                <th><?php echo esc_html( $paid_headers['channels'] ?? __( 'Channels', 'aichatbotfree' ) ); ?></th>
+                                <th><?php echo esc_html( $paid_headers['ai'] ?? __( 'AI', 'aichatbotfree' ) ); ?></th>
+                                <th><?php echo esc_html( $paid_headers['rating'] ?? __( 'Rating', 'aichatbotfree' ) ); ?></th>
+                                <?php if ( $paid_show_website ) : ?>
+                                    <th><?php esc_html_e( 'Website', 'aichatbotfree' ); ?></th>
+                                <?php endif; ?>
+                                <th><?php esc_html_e( 'Read Review', 'aichatbotfree' ); ?></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php aichatbotfree_render_comparison_rows( $paid_comparison, 'paid', $paid_show_website ); ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
