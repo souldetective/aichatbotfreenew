@@ -253,6 +253,16 @@ label { color: var(--text-primary); font-weight: 600; display: block; margin-bot
 .comparison-table th { color: var(--text-primary); font-size: 14px; text-transform: uppercase; letter-spacing: 0.02em; }
 .comparison-table tr:hover td { background: rgba(0, 102, 255, 0.05); }
 
+.responsive-table {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.responsive-table .comparison-table {
+  min-width: 640px;
+}
+
 .comparison-stack { display: flex; flex-direction: column; gap: var(--space-4); }
 .comparison-stack__header p { margin: 6px 0 0; max-width: 720px; }
 .comparison-stack__tables { display: flex; flex-direction: column; gap: var(--space-4); }
