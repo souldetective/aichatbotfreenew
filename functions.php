@@ -38,6 +38,20 @@ add_action( 'after_setup_theme', function () {
     );
 });
 
+add_action( 'widgets_init', function () {
+    register_sidebar(
+        [
+            'name'          => __( 'Blog Sidebar', 'aichatbotfree' ),
+            'id'            => 'blog-sidebar',
+            'description'   => __( 'Widgets shown on the blog and category archive pages.', 'aichatbotfree' ),
+            'before_widget' => '<div class="sidebar-widget">',
+            'after_widget'  => '</div>',
+            'before_title'  => '<h3 class="sidebar-widget__title">',
+            'after_title'   => '</h3>',
+        ]
+    );
+} );
+
 add_action( 'wp_enqueue_scripts', function () {
     wp_enqueue_style( 'aichatbotfree-style', get_stylesheet_uri(), [], AI_CHATBOTFREE_VERSION );
     wp_enqueue_style( 'aichatbotfree-main', get_template_directory_uri() . '/assets/css/main.css', [], AI_CHATBOTFREE_VERSION );
@@ -217,6 +231,105 @@ function aichatbotfree_get_field( $selector, $post_id = false, $default = null )
 
     return $default;
 }
+
+/**
+ * Get a trimmed excerpt in characters.
+ *
+ * @param int $length Number of characters to keep.
+ * @return string
+ */
+function aichatbotfree_get_excerpt_chars( $length = 180 ) {
+    $excerpt = wp_strip_all_tags( get_the_excerpt() );
+
+    if ( '' === $excerpt ) {
+        return '';
+    }
+
+    $excerpt = trim( preg_replace( '/\s+/', ' ', $excerpt ) );
+    $trimmed = mb_substr( $excerpt, 0, $length );
+
+    if ( mb_strlen( $excerpt ) > $length ) {
+        $trimmed = rtrim( $trimmed ) . '…';
+    }
+
+    return $trimmed;
+}
+
+/**
+ * Blog layout category selector meta box.
+ */
+add_action( 'add_meta_boxes', function () {
+    add_meta_box(
+        'aichatbotfree_blog_categories',
+        __( 'Blog Layout Categories', 'aichatbotfree' ),
+        'aichatbotfree_render_blog_categories_metabox',
+        'page',
+        'side'
+    );
+} );
+
+function aichatbotfree_render_blog_categories_metabox( $post ) {
+    $template = get_page_template_slug( $post );
+
+    if ( 'template-blog.php' !== $template ) {
+        echo '<p>' . esc_html__( 'Assign the Blog Layout template to enable category selection.', 'aichatbotfree' ) . '</p>';
+        return;
+    }
+
+    wp_nonce_field( 'aichatbotfree_blog_categories_save', 'aichatbotfree_blog_categories_nonce' );
+
+    $selected = get_post_meta( $post->ID, '_aichatbotfree_blog_categories', true );
+    $selected = is_array( $selected ) ? array_map( 'absint', $selected ) : [];
+    $categories = get_categories( [ 'hide_empty' => false ] );
+
+    if ( empty( $categories ) ) {
+        echo '<p>' . esc_html__( 'No categories found.', 'aichatbotfree' ) . '</p>';
+        return;
+    }
+
+    echo '<p>' . esc_html__( 'Choose which categories appear on the Blog layout. Leave all unchecked to show every category.', 'aichatbotfree' ) . '</p>';
+    echo '<div class="aichatbotfree-category-checklist">';
+
+    foreach ( $categories as $category ) {
+        $checked = in_array( $category->term_id, $selected, true ) ? 'checked' : '';
+        printf(
+            '<label style="display:block; margin-bottom:6px;"><input type="checkbox" name="aichatbotfree_blog_categories[]" value="%1$d" %2$s> %3$s</label>',
+            absint( $category->term_id ),
+            $checked,
+            esc_html( $category->name )
+        );
+    }
+
+    echo '</div>';
+}
+
+add_action( 'save_post_page', function ( $post_id ) {
+    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+        return;
+    }
+
+    if ( ! isset( $_POST['aichatbotfree_blog_categories_nonce'] ) ||
+        ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['aichatbotfree_blog_categories_nonce'] ) ), 'aichatbotfree_blog_categories_save' ) ) {
+        return;
+    }
+
+    if ( ! current_user_can( 'edit_page', $post_id ) ) {
+        return;
+    }
+
+    $selected = [];
+
+    if ( isset( $_POST['aichatbotfree_blog_categories'] ) && is_array( $_POST['aichatbotfree_blog_categories'] ) ) {
+        $selected = array_map( 'absint', wp_unslash( $_POST['aichatbotfree_blog_categories'] ) );
+        $selected = array_filter( $selected );
+    }
+
+    if ( empty( $selected ) ) {
+        delete_post_meta( $post_id, '_aichatbotfree_blog_categories' );
+    } else {
+        update_post_meta( $post_id, '_aichatbotfree_blog_categories', $selected );
+    }
+} );
 
 /**
  * Register Custom Post Type: chatbot_tool
