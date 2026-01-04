@@ -4,6 +4,10 @@
     <article class="card">
         <h1><?php the_title(); ?></h1>
         <div class="entry-content"><?php the_content(); ?></div>
+
+        <?php if ( ! is_front_page() && function_exists( 'have_rows' ) && have_rows( 'article_sections' ) ) : ?>
+            <?php get_template_part( 'template-parts/article-sections' ); ?>
+        <?php endif; ?>
     </article>
 <?php endwhile; endif; ?>
 </div>
