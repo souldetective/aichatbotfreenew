@@ -1126,7 +1126,8 @@ function aichatbotfree_render_comparison_rows( $items, $type = 'free', $show_web
         $rating    = $item['rating'] ?? '';
         $tool_id   = $tool instanceof WP_Post ? $tool->ID : ( ( is_array( $tool ) && isset( $tool['ID'] ) ) ? (int) $tool['ID'] : ( is_numeric( $tool ) ? (int) $tool : 0 ) );
         $link      = $tool_id ? get_permalink( $tool_id ) : '';
-        $tool_name = $tool_id ? get_the_title( $tool_id ) : '';
+        $homepage_title = $tool_id ? get_field( 'homepage_section_title', $tool_id ) : '';
+        $tool_name      = $homepage_title ? $homepage_title : ( $tool_id ? get_the_title( $tool_id ) : '' );
         $affiliate = $tool_id ? aichatbotfree_get_affiliate_link_data( $tool_id ) : [ 'url' => '', 'title' => '' ];
         $has_site  = $show_website && $affiliate['url'] && $affiliate['title'];
         $review_cell_attributes = $show_website && ! $has_site ? ' colspan="2"' : '';
